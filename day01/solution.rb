@@ -16,7 +16,7 @@ end
 
 class D1P1Solver < DayOneSolver
   def get_compared(i)
-    (i==@characters.length-1) ? 0 : i+1
+    (i+1) % @characters.length
   end 
 end
 
