@@ -1,10 +1,13 @@
 #!/usr/bin/env ruby
+require 'net/http'
 
 class DayThreeSolver
   def initialize(input)
     @input = input
   end
+end
 
+class D3P1Solver < DayThreeSolver
   def solve
     puts "Input: #{@input}"
     sqrt = Math.sqrt @input
@@ -31,6 +34,25 @@ class DayThreeSolver
   end
 end
 
-input = 368078
-DayThreeSolver.new(input).solve
+class D3P2Solver < DayThreeSolver
+  def parse_sums(data)
+    data.each_line do |line|
+      next if (line =~ /\#/) || line == "\n"
+      row = line.split(" ")
+      if row[1].to_i > @input
+        @solution = row[1]
+        break
+      end
+    end
+  end
 
+  def solve
+    data = Net::HTTP.get(URI("https://oeis.org/A141481/b141481.txt"))
+    parse_sums data
+    puts "Solution: #{@solution}"
+  end
+end
+
+input = 368078
+D3P1Solver.new(input).solve
+D3P2Solver.new(input).solve
