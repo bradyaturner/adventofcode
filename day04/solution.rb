@@ -8,11 +8,8 @@ class DayFourSolver
   def solve
     num_valid = 0
     @file.each_line do |line|
-      valid = true
-      counts = Hash.new 0
-      line.split.each { |word| counts[get_word(word)] += 1 }
-      counts.each { |word,count| valid = false if count > 1 }
-      num_valid += 1 if valid
+      words = line.split.map { |word| get_word(word) }
+      num_valid += 1 if words == words.uniq
     end
     puts "Solution: #{num_valid}"
   end
