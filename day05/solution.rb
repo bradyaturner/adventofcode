@@ -10,9 +10,9 @@ class DayFiveSolver
     arr = @file.split.map(&:to_i)
     steps = 0
     loop do
-      inc = arr[cur]
-      arr[cur] += 1
-      cur += inc
+      offset = arr[cur]
+      arr[cur] += get_increment(offset)
+      cur += offset
       steps += 1
       break if cur < 0 || cur >= arr.length
     end
@@ -20,5 +20,16 @@ class DayFiveSolver
   end
 end
 
+class D5P1Solver < DayFiveSolver
+  def get_increment(offset) 1 end
+end
+
+class D5P2Solver < DayFiveSolver
+  def get_increment(offset)
+    (offset>=3) ? -1 : 1
+  end
+end
+
 path = "input.txt"
-DayFiveSolver.new(path).solve
+D5P1Solver.new(path).solve
+D5P2Solver.new(path).solve
