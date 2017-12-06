@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-class DayFiveSolver
+class DaySixSolver
   def initialize(path)
     @file = File.read(path)
     @banks = @file.split.map(&:to_i)
@@ -24,12 +24,44 @@ class DayFiveSolver
     loop do
       redistribute
       count += 1
-      break if @history.include? @banks
+      break if check
+      update(count)
       @history << Array.new(@banks)
     end
-    puts "Solution: #{count}"
+    puts "Solution: #{count - offset}"
+  end
+end
+
+class D6P1Solver < DaySixSolver
+  def check
+    @history.include? @banks
+  end
+
+  def update(count)
+  end
+
+  def offset
+    0
+  end
+end
+
+class D6P2Solver < DaySixSolver
+  def check
+    @banks == @known
+  end
+
+  def update(count)
+    if (@history.include?(@banks) && @known.nil?)
+      @known = Array.new(@banks)
+      @first_count = count
+    end
+  end
+
+  def offset
+    @first_count
   end
 end
 
 path = "input.txt"
-DayFiveSolver.new(path).solve
+D6P1Solver.new(path).solve
+D6P2Solver.new(path).solve
