@@ -16,14 +16,12 @@ class DayNineSolver
   end
 
   def solve
-    #puts @file.inspect
     parse(0,@file.length-1)
-    puts "Solution: #{@score}"
   end
 
   # parse a substring -- return its score
   def parse(si,ei,ds=0)
-    puts "Parse(#{si},#{ei}): First: #{@file[si]}, Last: #{@file[ei]}"
+    #puts "Parse(#{si},#{ei}): First: #{@file[si]}, Last: #{@file[ei]}"
     i = si
     sc = nil
     ec = nil
@@ -51,7 +49,7 @@ class DayNineSolver
       end
 
       if sc && ec
-        puts "FOUND GROUP: SC: #{sc}, EC: #{ec}, Score: #{ds+1}"
+        #puts "FOUND GROUP: SC: #{sc}, EC: #{ec}, Score: #{ds+1}"
         @score += ds+1
         parse(sc+1,ec-1,ds+1)
         sc = nil
@@ -59,7 +57,8 @@ class DayNineSolver
       end
 
       if gs && ge
-        puts "FOUND GARBAGE: GS: #{gs}, GE: #{ge}"
+        #puts "FOUND GARBAGE: GS: #{gs}, GE: #{ge}"
+        parse_garbage(gs,ge)
         gs=nil
         ge=nil
       end
@@ -73,7 +72,40 @@ class DayNineSolver
 end
 
 class D9P1Solver < DayNineSolver
+  def solve
+    super
+    puts "P1 Solution(#{@path}): #{@score}"
+  end
+  def parse_garbage(gs,ge)
+  end
+end
+
+class D9P2Solver < DayNineSolver
+  def initialize(path)
+    super
+    @garbage_count = 0
+    @collected_garbage = []
+  end
+
+  def solve
+    super
+    puts "P2 Solution(#{@path}): #{@garbage_count}"
+  end
+
+  def parse_garbage(gs,ge)
+    return if @collected_garbage.include? [gs,ge]
+    @collected_garbage << [gs,ge]
+    cancel = false
+    count = 0
+    @file[gs+1..ge-1].each_char do |c|
+      count += 1 if !cancel && c!=CANCEL
+      cancel = c==CANCEL && !cancel
+    end
+    @garbage_count += count
+  end
 end
 
 path = "input.txt"
 D9P1Solver.new(path).solve
+D9P2Solver.new(path).solve
+
