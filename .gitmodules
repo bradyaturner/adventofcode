@@ -1,0 +1,3 @@
+[submodule "lib/aoc-client"]
+	path = lib/aoc-client
+	url = git@github.com:bradyaturner/aoc-client

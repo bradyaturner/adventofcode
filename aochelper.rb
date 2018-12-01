@@ -4,7 +4,7 @@ require 'net/http'
 require 'json'
 require 'date'
 require './version'
-require './aocclient.rb'
+require './lib/aoc-client/aocclient.rb'
 
 class AOCHelper
   include DateHelper
