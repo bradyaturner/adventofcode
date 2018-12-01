@@ -3,17 +3,20 @@
 class DayOneSolver
   def initialize(path)
     @file = File.read path
+    @filename = File.basename path
     @data = @file.split.map(&:to_i)
+    @solution
   end
 
   def solve
+    puts "#{self.class} (#{@filename}): #{@solution}"
   end
 end
 
 class D1P1Solver < DayOneSolver
   def solve
-    freq = @data.inject(&:+)
-    puts "Solution: #{freq}"
+    @solution = @data.inject(&:+)
+    super
   end
 end
 
@@ -26,7 +29,8 @@ class D1P2Solver < DayOneSolver
       break if frequencies.include? freq
       frequencies << freq
     end
-    puts "Solution: #{freq}"
+    @solution = freq
+    super
   end
 end
 
