@@ -60,7 +60,7 @@ class AOCSolutionInitializer
     puts "Downloading input data and saving to #{filepath}"
     puts "Creating empty file at #{samplefilepath}"
     if !@dry_run
-      File.open(filepath, 'w') {|f| f.write @helper.get_input_data(@day, @year)}
+      File.open(filepath, 'w') {|f| f.write @helper.get_input_data(@helper.current_day, @year)}
       FileUtils.touch(samplefilepath)
     end
   end
