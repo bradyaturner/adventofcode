@@ -1,15 +1,14 @@
 #!/usr/bin/env ruby
 
-require 'net/http'
 require 'json'
-require 'date'
 require './version'
 require './lib/aoc-client/aocclient.rb'
 
 class AOCHelper
   include DateHelper
   def initialize
-    @client = AOCClient.new "bradyaturner/adventofcode", VERSION
+    secrets = JSON.parse File.read "aoc_data.json"
+    @client = AOCClient.new "bradyaturner/adventofcode", VERSION, secrets
   end
 
   def get_leaderboard(year=current_year)
