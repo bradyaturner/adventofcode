@@ -1,0 +1,49 @@
+CART LOGIC:
+
+1) Every iteration, for each cart, increment its position by its velocity:
+	if facing left, [-1,0]
+	if facing right, [1,0]
+	if facing up, [0,-1]
+	if facing down [0,1]
+
+1b) It is assumed that the cart is moving parallel to the tracks (based on later rules)
+
+2) Check track type of new position:
+	- if "straight", do nothing (doesn't matter what direction)
+	- if "curve", change direction based on curve type + current direction
+		- current direction right, curve type \  => down
+		- current direction right, curve type / => up
+		- current direction left, curve type / => down
+		- current direction left, curve type \ => up
+		- current direction up, curve type \ => left
+		- current direction up, curve type / => right
+		- current direction down, curve type / => left
+		- current direction down, curve type \ => right
+	- can this be done mathmatically?
+		- \ right->down = [ 1, 0]->[ 0, 1]
+		- \ left->up	= [-1, 0]->[ 0,-1]
+		- \ up->left	= [ 0,-1]->[-1, 0]
+		- \ down->right	= [ 0, 1]->[ 1, 0]
+			- encountering a "\" flips x,y direction
+		- / right->up 	= [ 1, 0]->[ 0,-1]
+		- / left->down	= [-1, 0]->[ 0, 1]
+		- / up->right	= [ 0,-1]->[ 1, 0]
+		- / down->left	= [ 0, 1]->[-1, 0]
+			- encountering a "/" flips x,y direction and multiplies by -1
+
+
+	- if "intersection", follow order: left, straight, right
+		- right, turn right: down
+		- left, turn right: up
+		- up, turn right: right
+		- down, turn right: left
+		- [ 1, 0] * [ 1, 0] => [ 0, 1]
+		- [-1, 0] * [ 1, 0] => [ 0,-1]
+		- [ 0,-1] * [ 1, 0] => [ 1, 0]
+		- [ 0, 1] * [ 1, 0] => [-1, 0]
+		- rotate +90deg (right) [x,y] => [-y,x]
+		- rotate -90deg (left)	[x,y] => [y,-x]
+
+
+WRONG ANSWERS:
+10, 138
