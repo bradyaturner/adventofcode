@@ -64,8 +64,7 @@ class Day09Solver
   def setup
     parts = @file.split
     @num_players = parts[0].to_i
-    @players = {}
-    0.upto(@num_players-1) {|i| @players[i] = Player.new(i)}
+    @players = Hash.new{|hash,key| hash[key] = Player.new(key)}
     @num_rounds = parts[6].to_i
     @marble_list = MarbleList.new
   end
@@ -73,18 +72,16 @@ class Day09Solver
   def play(num_rounds=@num_rounds)
     @marble_list.insert(Marble.new(0))
     1.upto(num_rounds) do |round_num|
-      current_player = (round_num % @num_players)
+      current_player = @players[(round_num % @num_players)]
       if round_num % 23 == 0
-        @players[current_player].score += round_num
         @marble_list.left(7)
-        @players[current_player].score += (@marble_list.delete).id
+        current_player.score += round_num + (@marble_list.delete).id
       else
         @marble_list.right(1)
         @marble_list.insert(Marble.new(round_num))
       end
     end
-
-    @solution = @players.collect{|id,p| p.score}.max
+    @solution = @players.values.map(&:score).max
   end
 
   def solve
