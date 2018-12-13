@@ -6,18 +6,14 @@ class Day08Solver
     @filename = File.basename path
     @solution = nil
     @id = 0
+    @nodes = {}
+    parse_input
   end
 
   def parse_input
-    # TODO just call parse_recursive here
     @nodes = {}
     data = @file.split.map(&:to_i)
-    num_children, num_metadata = data.shift(2)
-    id = next_id
-    @nodes[id] = Node.new(id, num_children, num_metadata)
-    parse_recursive(data, id, num_children)
-    metadata = data.shift(num_metadata)
-    @nodes[id].set_metadata metadata
+    parse_recursive(data, nil, 1)
   end
 
   def parse_recursive(data, parent_id, child_count)
@@ -67,34 +63,23 @@ class Node
   end
 
   def value
-    value = 0
     if @children.length == 0
-      value = @metadata.inject(&:+)
+      @metadata.sum
     else
-      @metadata.each do |m|
-        c = @children[m-1]
-        if !c.nil?
-          value += c.value
-        end
-      end
+      @metadata.collect{|m| @children[m-1]}.compact.map(&:value).sum
     end
-    value
   end
 end
 
 class D08P1Solver < Day08Solver
   def solve
-    parse_input
-    @sum = 0
-    @nodes.each {|id, n| @sum += n.metadata.inject(&:+)}
-    @solution = @sum
+    @solution = @nodes.values.map(&:metadata).flatten.sum
     super
   end
 end
 
 class D08P2Solver < Day08Solver
   def solve
-    parse_input
     @solution = @nodes[1].value
     super
   end
